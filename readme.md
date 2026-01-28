@@ -1,53 +1,149 @@
-# 🔐 SteganoBank – Secure Steganography & Audit Blockchain System
+**🔐 SteganoSecure - Secure Steganography Messaging System**
+A comprehensive web-based application that demonstrates multiple security concepts including authentication, authorization, encryption, digital signatures, hashing, and steganography with blockchain-based audit trails.
 
-A secure web-based steganography system that hides encrypted messages inside images, enhanced with:
-- Multi-Factor Authentication (OTP)
-- Role-Based Access Control
-- Digital Signatures
-- Blockchain-based Audit Logs
+**📋 Table of Contents**
 
-## 🚀 Features
-- LSB Image Steganography
-- AES Encryption + SHA-256 Integrity
-- RSA Digital Signatures
-- Email-based OTP Authentication
-- Blockchain Audit Trail (Proof-of-Work)
-- QR Code based message sharing
-- Role-based access (Admin / Sender / Receiver)
+Features
+Security Components
+Technology Stack
+Prerequisites
+Installation & Setup
+Configuration
+Running the Application
 
-## 🛠 Tech Stack
-- Python (Flask)
-- SQLite + SQLAlchemy
-- Cryptography (AES, RSA, SHA-256)
-- SMTP (Email OTP)
-- HTML, CSS, Jinja2
-- Custom Blockchain Implementation
+**✨ Features**
+Core Functionality
 
-## 🔑 Security Concepts Implemented
-- Confidentiality
-- Integrity
-- Authentication
-- Authorization
-- Non-repudiation
-- Least Privilege Principle
+🖼️ LSB Steganography: Hide encrypted messages inside images
+🔐 AES-256 Encryption: Military-grade message encryption
+✍️ RSA Digital Signatures: Ensure message authenticity
+🔗 Blockchain Audit Trail: Immutable logging of all system activities
+📱 QR Code Generation: Easy message sharing
+🔍 Steganalysis Tools: Chi-square attack detection, histogram analysis
 
-## 📂 Project Structure
-steganography_system/
-│
-├── app.py
-├── config.py.example
-├── models.py
-├── blockchain.py
-├── crypto_utils.py
-├── steganography.py
-├── encoding.py
-├── decorators.py
-│
-├── templates/
-├── static/
-├── uploads/
-├── stego_images/
-│
-├── requirements.txt
-├── .gitignore
-└── README.md
+**Security Features**
+
+🔑 Multi-Factor Authentication (MFA): Password + Email OTP
+👥 Role-Based Access Control (RBAC): Admin, Sender, Receiver roles
+🧂 Salted Password Hashing: Secure password storage
+🔒 Message Integrity Verification: Hash validation
+🎫 Session Management: Secure session handling
+📊 Access Control Matrix: Fine-grained permissions
+
+
+**🛡️ Security Components**
+1. Authentication (Multi-Factor)
+
+Single-Factor: Username + Password (hashed with salt)
+Multi-Factor: Time-based OTP sent via email (5-minute validity)
+
+2. Authorization (Access Control)
+
+Access Control List (ACL) with 3 roles:
+
+Admin: Full system access, blockchain visibility
+Sender: Create and manage own messages
+Receiver: View received messages only
+
+3. Encryption
+
+Key Derivation: Deterministic key generation from sender/receiver IDs
+AES-256-CBC: Symmetric encryption with random IV
+RSA-2048: Asymmetric key pairs for digital signatures
+
+4. Hashing & Digital Signatures
+
+SHA-256 Hashing: With random salt for message integrity
+RSA-PSS Signatures: Message authenticity verification
+
+5. Encoding Techniques
+
+Base64: Binary data encoding
+QR Codes: Message extraction URL encoding
+LSB Steganography: Image-based data hiding
+
+6. Blockchain Audit
+
+Immutable Audit Trail: All user actions logged
+Proof-of-Work: Mining with configurable difficulty
+Chain Validation: Integrity verification
+
+
+**🛠️ Technology Stack**
+Backend
+
+Python 3.8+
+Flask 2.3.0: Web framework
+SQLAlchemy: ORM for database management
+
+**Security Libraries**
+
+cryptography: AES encryption, RSA signatures
+werkzeug.security: Password hashing
+pyotp: OTP generation
+hashlib: SHA-256 hashing
+
+Steganography & Encoding
+
+stegano: LSB steganography
+PIL (Pillow): Image processing
+qrcode: QR code generation
+NumPy & SciPy: Statistical analysis
+
+Frontend
+
+HTML5, CSS3, Bootstrap 5
+Jinja2: Template engine
+
+
+**📦 Prerequisites**
+
+Python 3.8 or higher
+pip (Python package manager)
+Gmail account (for OTP email delivery)
+Git (for cloning repository)
+
+
+**🚀 Installation & Setup**
+Step 1: Clone the Repository
+bashgit clone https://github.com/yourusername/stegano-secure.git
+cd stegano-secure
+
+Step 2: Create Virtual Environment
+On Windows:
+bashpython -m venv venv
+venv\Scripts\activate
+On macOS/Linux:
+bashpython3 -m venv venv
+source venv/bin/activate
+You should see (venv) prefix in your terminal.
+
+Step 3: Install Dependencies
+bashpip install --upgrade pip
+pip install -r requirements.txt
+
+Step 4: Configure the Application
+Create config.py from template
+bash# Copy the example config file
+cp config.py.example config.py
+Edit config.py with your settings - see Configuration section below
+
+Step 5: Set Up Gmail App Password
+⚠️ Important: Do NOT use your regular Gmail password!
+
+Go to your Google Account: https://myaccount.google.com/
+Navigate to Security → 2-Step Verification (enable if not already)
+Scroll down to App passwords
+Select app: Mail, Select device: Other (Custom name)
+Name it: "SteganoSecure App"
+Copy the 16-character password
+Paste it in config.py as MAIL_PASSWORD
+
+Example:
+pythonMAIL_USERNAME = 'johndoe@gmail.com'
+MAIL_PASSWORD = 'abcd efgh ijkl mnop'  # 16-char app password
+Step 6: Create Required Folders
+bashmkdir uploads
+mkdir -p static/stego_images
+Step 7: Initialize the Database
+The database will be automatically created when you first run the app.
