@@ -189,13 +189,3 @@ mkdir -p static/stego_images
 The database will be automatically created when you first run the app.
 
 ---
-
-## ⚙️ Configuration
-
-(See Configuration section for details)
-
----
-
-## ▶️ Running the Application
-
-(See Running the Application section for details)
