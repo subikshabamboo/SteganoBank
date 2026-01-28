@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - SteganoSecure{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card-custom p-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1">
+                        <i class="fas fa-tachometer-alt text-primary me-2"></i>
+                        Dashboard
+                    </h2>
+                    <p class="text-muted mb-0">
+                        Welcome, <strong>{{ user.username }}</strong> 
+                        <span class="badge bg-primary ms-2">{{ user.role }}</span>
+                    </p>
+                </div>
+                {% if user.role in ['sender', 'admin'] %}
+                <div>
+                    <a href="{{ url_for('hide_message') }}" class="btn btn-gradient">
+                        <i class="fas fa-plus-circle me-2"></i>Hide New Message
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <h4 class="text-white mb-4">
+            <i class="fas fa-envelope me-2"></i>
+            {% if user.role == 'sender' %}
+                Your Sent Messages
+            {% elif user.role == 'receiver' %}
+                Messages for You
+            {% else %}
+                All System Messages
+            {% endif %}
+            <span class="badge bg-white text-primary ms-2">{{ messages|length }}</span>
+        </h4>
+        
+        {% if messages %}
+            <div class="row">
+                {% for msg in messages %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="message-card-enhanced card h-100">
+                        <!-- Card Image Header -->
+                        <div class="card-img-top-container position-relative">
+                            <div class="message-status-badge">
+                                {% if msg.is_read %}
+                                    <span class="badge bg-success">
+                                        <i class="fas fa-check-double me-1"></i>Read
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="fas fa-envelope me-1"></i>Unread
+                                    </span>
+                                {% endif %}
+                            </div>
+                            <div class="card-icon-header">
+                                <i class="fas fa-image fa-4x text-primary opacity-75"></i>
+                            </div>
+                        </div>
+                        
+                        <!-- Card Body -->
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title fw-bold mb-3">
+                                <i class="fas fa-file-image text-primary me-2"></i>
+                                {{ msg.original_filename[:20] }}{% if msg.original_filename|length > 20 %}...{% endif %}
+                            </h5>
+                            
+                            <!-- Sender/Receiver Info -->
+                            <div class="message-info mb-3">
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="info-icon">
+                                        <i class="fas fa-user-circle text-primary"></i>
+                                    </div>
+                                    <div class="info-text">
+                                        <small class="text-muted">From</small>
+                                        <p class="mb-0 fw-semibold">{{ msg.sender.username }}</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <div class="info-icon">
+                                        <i class="fas fa-user text-success"></i>
+                                    </div>
+                                    <div class="info-text">
+                                        <small class="text-muted">To</small>
+                                        <p class="mb-0 fw-semibold">{{ msg.receiver.username }}</p>
+                                    </div>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <div class="info-icon">
+                                        <i class="fas fa-clock text-info"></i>
+                                    </div>
+                                    <div class="info-text">
+                                        <small class="text-muted">{{ msg.created_at.strftime('%b %d, %Y') }}</small>
+                                        <p class="mb-0 small">{{ msg.created_at.strftime('%I:%M %p') }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Security Badges -->
+                            <div class="security-badges mb-3">
+                                <span class="badge bg-success me-1 mb-1">
+                                    <i class="fas fa-lock me-1"></i>Encrypted
+                                </span>
+                                <span class="badge bg-info me-1 mb-1">
+                                    <i class="fas fa-signature me-1"></i>Signed
+                                </span>
+                                <span class="badge bg-warning text-dark mb-1">
+                                    <i class="fas fa-eye-slash me-1"></i>Hidden
+                                </span>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="mt-auto">
+                                {% if user.role in ['receiver', 'admin'] or msg.sender_id == user.id %}
+                                <a href="{{ url_for('extract_message', message_id=msg.id) }}" 
+                                   class="btn btn-primary btn-sm w-100 mb-2">
+                                    <i class="fas fa-eye me-1"></i>View Message
+                                </a>
+                                {% endif %}
+                                
+                                <div class="d-flex gap-2">
+                                    <a href="{{ url_for('download_image', message_id=msg.id) }}" 
+                                       class="btn btn-outline-info btn-sm flex-fill">
+                                        <i class="fas fa-download"></i>
+                                    </a>
+                                    {% if msg.can_delete(user) %}
+                                    <form method="POST" action="{{ url_for('delete_message', message_id=msg.id) }}" 
+                                          class="flex-fill" onsubmit="return confirm('Delete this message?')">
+                                        <button type="submit" class="btn btn-outline-danger btn-sm w-100">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="card-custom p-5 text-center">
+                <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+                <h4 class="text-muted">No messages yet</h4>
+                <p class="text-muted">
+                    {% if user.role == 'sender' %}
+                        Start by hiding your first message!
+                    {% else %}
+                        Waiting for messages to arrive...
+                    {% endif %}
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Blockchain Audit Trail - SteganoBank{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card-custom p-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="mb-1">
+                        <i class="fas fa-cube text-primary me-2"></i>
+                        Blockchain Audit Trail
+                    </h2>
+                    <p class="text-muted mb-0">Immutable log of all system operations</p>
+                </div>
+                <div>
+                    <a href="{{ url_for('verify_blockchain') }}" class="btn btn-success">
+                        <i class="fas fa-shield-check me-2"></i>Verify Integrity
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Blockchain Stats -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card-custom p-4 text-center">
+            <i class="fas fa-cubes fa-3x text-primary mb-3"></i>
+            <h3 class="fw-bold mb-1">{{ stats.total_blocks }}</h3>
+            <p class="text-muted mb-0">Total Blocks</p>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card-custom p-4 text-center">
+            <i class="fas fa-exchange-alt fa-3x text-info mb-3"></i>
+            <h3 class="fw-bold mb-1">{{ stats.total_transactions }}</h3>
+            <p class="text-muted mb-0">Transactions</p>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card-custom p-4 text-center">
+            {% if stats.chain_valid %}
+                <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                <h3 class="fw-bold mb-1 text-success">Valid</h3>
+            {% else %}
+                <i class="fas fa-exclamation-triangle fa-3x text-danger mb-3"></i>
+                <h3 class="fw-bold mb-1 text-danger">Invalid</h3>
+            {% endif %}
+            <p class="text-muted mb-0">Chain Status</p>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card-custom p-4 text-center">
+            <i class="fas fa-fingerprint fa-3x text-warning mb-3"></i>
+            <h3 class="fw-bold mb-1" style="font-size: 14px;">{{ stats.latest_hash[:8] }}...</h3>
+            <p class="text-muted mb-0">Latest Hash</p>
+        </div>
+    </div>
+</div>
+
+<!-- Alert -->
+<div class="alert alert-info mb-4" style="border-radius: 15px;">
+    <h6 class="fw-bold mb-2">
+        <i class="fas fa-info-circle me-2"></i>What is Blockchain Audit Trail?
+    </h6>
+    <p class="mb-0">
+        Every system operation (login, message hide, extract, delete) is recorded in an immutable blockchain. 
+        Each block contains transactions and is cryptographically linked to the previous block. 
+        Any tampering attempt will break the chain and be immediately detected.
+    </p>
+</div>
+
+<!-- Blockchain Blocks -->
+<div class="row">
+    <div class="col-12">
+        <h4 class="text-white mb-3">
+            <i class="fas fa-link me-2"></i>Blockchain Blocks
+        </h4>
+        
+        {% for block in chain|reverse %}
+        <div class="card-custom mb-3">
+            <div class="card-body">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center">
+                        <i class="fas fa-cube fa-3x text-primary mb-2"></i>
+                        <h5 class="fw-bold mb-0">Block #{{ block.index }}</h5>
+                    </div>
+                    <div class="col-md-7">
+                        <h6 class="fw-bold mb-2">
+                            {% if block.index == 0 %}
+                                <span class="badge bg-primary">Genesis Block</span>
+                            {% else %}
+                                <span class="badge bg-success">{{ block.data|length }} Transaction(s)</span>
+                            {% endif %}
+                        </h6>
+                        
+                        {% if block.index > 0 and block.data %}
+                            {% for transaction in block.data %}
+                            <div class="mb-2 p-2 bg-light rounded">
+                                <small>
+                                    <strong>{{ transaction.type }}</strong> by 
+                                    <span class="badge bg-primary">{{ transaction.user }}</span>
+                                    <br>
+                                    {{ transaction.details }}
+                                    <br>
+                                    <span class="text-muted">{{ transaction.timestamp }}</span>
+                                </small>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted mb-0">{{ block.data }}</p>
+                        {% endif %}
+                        
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i>{{ block.timestamp }}
+                        </small>
+                    </div>
+                    <div class="col-md-3">
+                        <small class="text-muted d-block mb-1">
+                            <i class="fas fa-fingerprint me-1"></i><strong>Hash:</strong>
+                        </small>
+                        <code style="font-size: 10px; word-break: break-all;">{{ block.hash[:32] }}...</code>
+                        
+                        <small class="text-muted d-block mb-1 mt-2">
+                            <i class="fas fa-link me-1"></i><strong>Previous:</strong>
+                        </small>
+                        <code style="font-size: 10px; word-break: break-all;">{{ block.previous_hash[:32] }}...</code>
+                        
+                        <small class="text-muted d-block mt-2">
+                            <i class="fas fa-hammer me-1"></i><strong>Nonce:</strong> {{ block.nonce }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light btn-lg">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+{% endblock %}

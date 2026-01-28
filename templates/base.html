@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Steganography System{% endblock %}</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        * {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            /* Primary gradient */
+            background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+
+            /* Accent colors */
+            --primary: #134e5e;
+            --secondary: #71b280;
+            --accent: #10b981;
+        }
+        
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-custom {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: none;
+        }
+        
+        .btn-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            color: white;
+        }
+        
+        .alert-custom {
+            border-radius: 15px;
+            border: none;
+        }
+        
+        .form-control-custom {
+            border-radius: 10px;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s;
+        }
+        
+        .form-control-custom:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .badge-role {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+        
+        .message-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-radius: 15px;
+            border: none;
+            margin-bottom: 20px;
+        }
+        
+        .message-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .footer-custom {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+        /* Enhanced Message Cards */
+        .message-card-enhanced {
+            background: white;
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-card-enhanced:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .card-img-top-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .message-status-badge {
+            position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 2;
+}
+
+.message-status-badge .badge {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card-icon-header {
+    text-align: center;
+}
+
+.card-icon-header i {
+    color: white;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.message-info .info-icon {
+    width: 35px;
+    height: 35px;
+    background: #f0f0f0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.message-info .info-icon i {
+    font-size: 16px;
+}
+
+.message-info .info-text {
+    flex-grow: 1;
+}
+
+.message-info .info-text small {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.message-info .info-text p {
+    font-size: 14px;
+}
+
+.security-badges .badge {
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 10px;
+}
+
+/* Smooth button animations */
+.message-card-enhanced .btn {
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.message-card-enhanced .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Card title truncation */
+.message-card-enhanced .card-title {
+    font-size: 16px;
+    line-height: 1.4;
+    min-height: 44px;
+}
+
+/* Improved spacing */
+.message-card-enhanced .card-body {
+    padding: 20px;
+}
+
+/* Empty state styling */
+.card-custom.text-center {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+.card-custom.text-center i.fa-inbox {
+    opacity: 0.3;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .message-card-enhanced {
+        margin-bottom: 20px;
+    }
+    
+    .card-img-top-container {
+        height: 120px;
+    }
+    
+    .card-icon-header i {
+        font-size: 3rem;
+    }
+}
+
+/* Hover effects for action buttons */
+.message-card-enhanced .btn-primary:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    border-color: #764ba2;
+}
+
+.message-card-enhanced .btn-outline-info:hover {
+    background: #17a2b8;
+    color: white;
+}
+
+.message-card-enhanced .btn-outline-danger:hover {
+    background: #dc3545;
+    color: white;
+}
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navbar -->
+    {% if session.user_id %}
+    <nav class="navbar navbar-expand-lg navbar-custom mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="{{ url_for('dashboard') }}">
+                <i class="fas fa-lock me-2"></i>SteganoBank
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('access_rights') }}">
+                            <i class="fas fa-home me-1"></i>Access Rights
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">
+                            <i class="fas fa-home me-1"></i>Dashboard
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('my_audit_log') }}">
+                            <i class="fas fa-history me-1"></i>My Audit Log
+                        </a>
+                    </li>
+                    
+                    {% if session.role in ['sender', 'admin'] %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('hide_message') }}">
+                            <i class="fas fa-plus-circle me-1"></i>Hide Message
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% if session.role == 'admin' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('view_blockchain') }}">
+                            <i class="fas fa-cube me-1"></i>Blockchain
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle me-1"></i>{{ session.username }}
+                            <span class="badge bg-primary ms-1">{{ session.role }}</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ url_for('logout') }}">
+                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                            </a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+    
+    <!-- Flash Messages -->
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-custom alert-dismissible fade show" role="alert">
+                        <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'check-circle' if category == 'success' else 'info-circle' }} me-2"></i>
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+    
+    <!-- Main Content -->
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer-custom text-center mt-5">
+        <div class="container">
+            <p class="mb-0">
+                <i class="fas fa-shield-alt me-2"></i>
+                Secure Steganographic Communication System | 2026
+            </p>
+            <small>Cryptography • Privacy • Security</small>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

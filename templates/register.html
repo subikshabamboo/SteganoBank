@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Register - SteganoBank{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-6 col-md-8">
+        <div class="card-custom p-5">
+            <div class="text-center mb-4">
+                <i class="fas fa-user-plus fa-3x text-primary mb-3"></i>
+                <h2 class="fw-bold">Create Account</h2>
+                <p class="text-muted">Join secure steganographic communication</p>
+            </div>
+            
+            <form method="POST">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-user me-2 text-primary"></i>Username
+                        </label>
+                        <input type="text" name="username" class="form-control form-control-custom" placeholder="Choose username" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-envelope me-2 text-primary"></i>Email
+                        </label>
+                        <input type="email" name="email" class="form-control form-control-custom" placeholder="your@email.com" required>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        <i class="fas fa-user-tag me-2 text-primary"></i>Role
+                    </label>
+                    <select name="role" class="form-select form-control-custom" required>
+                        <option value="sender">Sender (Can hide messages)</option>
+                        <option value="receiver">Receiver (Can extract messages)</option>
+                    </select>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-lock me-2 text-primary"></i>Password
+                        </label>
+                        <input type="password" name="password" class="form-control form-control-custom" placeholder="Min 6 characters" required>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <label class="form-label fw-semibold">
+                            <i class="fas fa-check-circle me-2 text-primary"></i>Confirm Password
+                        </label>
+                        <input type="password" name="confirm_password" class="form-control form-control-custom" placeholder="Re-enter password" required>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-gradient w-100 mb-3">
+                    <i class="fas fa-user-plus me-2"></i>Create Account
+                </button>
+                
+                <div class="text-center">
+                    <p class="text-muted mb-0">
+                        Already have an account? 
+                        <a href="{{ url_for('login') }}" class="text-primary fw-semibold text-decoration-none">Login here</a>
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

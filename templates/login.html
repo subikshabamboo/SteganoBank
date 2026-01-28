@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Login - SteganoSecure{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-lg-5 col-md-7">
+        <div class="card-custom p-5">
+            <div class="text-center mb-4">
+                <i class="fas fa-user-lock fa-3x text-primary mb-3"></i>
+                <h2 class="fw-bold">Welcome Back</h2>
+                <p class="text-muted">Login to access secure messaging</p>
+            </div>
+            
+            <form method="POST">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">
+                        <i class="fas fa-user me-2 text-primary"></i>Username
+                    </label>
+                    <input type="text" name="username" class="form-control form-control-custom" placeholder="Enter username" required autofocus>
+                </div>
+                
+                <div class="mb-4">
+                    <label class="form-label fw-semibold">
+                        <i class="fas fa-lock me-2 text-primary"></i>Password
+                    </label>
+                    <input type="password" name="password" class="form-control form-control-custom" placeholder="Enter password" required>
+                </div>
+                
+                <button type="submit" class="btn btn-gradient w-100 mb-3">
+                    <i class="fas fa-sign-in-alt me-2"></i>Login
+                </button>
+                
+                <div class="text-center">
+                    <p class="text-muted mb-0">
+                        Don't have an account? 
+                        <a href="{{ url_for('register') }}" class="text-primary fw-semibold text-decoration-none">Register here</a>
+                    </p>
+                </div>
+            </form>
+            
+            <div class="mt-4 p-3 bg-light rounded">
+                <p class="mb-2 fw-bold text-primary"><i class="fas fa-info-circle me-2"></i>Demo Accounts:</p>
+                <small class="d-block text-muted">👤 Admin: admin / admin123</small>
+                <small class="d-block text-muted">📤 Sender: sender / sender123</small>
+                <small class="d-block text-muted">📥 Receiver: receiver / receiver123</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

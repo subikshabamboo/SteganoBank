@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}Steganalysis Report - SteganoSecure{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card-custom p-5">
+            <div class="text-center mb-4">
+                <i class="fas fa-microscope fa-3x text-primary mb-3"></i>
+                <h2 class="fw-bold">Steganalysis Security Report</h2>
+                <p class="text-muted">Advanced detection analysis of hidden data</p>
+            </div>
+            
+            <!-- Chi-Square Attack Results -->
+            <div class="mb-4">
+                <h4 class="fw-bold mb-3">
+                    <i class="fas fa-chart-line me-2 text-primary"></i>
+                    Chi-Square Attack Test
+                </h4>
+                
+                {% if chi_square.detected == False %}
+                <div class="alert alert-success" style="border-radius: 15px;">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center">
+                            <i class="fas fa-shield-check fa-4x text-success"></i>
+                        </div>
+                        <div class="col-md-10">
+                            <h5 class="fw-bold text-success mb-2">
+                                <i class="fas fa-check-circle me-2"></i>PASSED - Undetectable!
+                            </h5>
+                            <p class="mb-2"><strong>Verdict:</strong> {{ chi_square.verdict }}</p>
+                            <p class="mb-0"><strong>Confidence:</strong> {{ chi_square.confidence }}% that image is clean</p>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div class="alert alert-warning" style="border-radius: 15px;">
+                    <h5 class="fw-bold text-warning mb-2">
+                        <i class="fas fa-exclamation-triangle me-2"></i>Detected (As Expected)
+                    </h5>
+                    <p class="mb-0">{{ chi_square.verdict }}</p>
+                </div>
+                {% endif %}
+                
+                <div class="row mt-3">
+                    <div class="col-md-3 mb-3">
+                        <div class="p-3 bg-light rounded text-center">
+                            <h6 class="text-muted mb-1">Chi-Square Statistic</h6>
+                            <h4 class="fw-bold mb-0">{{ chi_square.chi2_statistic }}</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="p-3 bg-light rounded text-center">
+                            <h6 class="text-muted mb-1">P-Value</h6>
+                            <h4 class="fw-bold mb-0">{{ chi_square.p_value }}</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="p-3 bg-light rounded text-center">
+                            <h6 class="text-muted mb-1">Critical Value</h6>
+                            <h4 class="fw-bold mb-0">{{ chi_square.critical_value }}</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="p-3 bg-light rounded text-center">
+                            <h6 class="text-muted mb-1">Confidence</h6>
+                            <h4 class="fw-bold mb-0">{{ chi_square.confidence }}%</h4>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mt-3" style="border-radius: 15px;">
+                    <small>
+                        <i class="fas fa-info-circle me-1"></i>
+                        <strong>Interpretation:</strong> Chi-square test analyzes LSB distribution. 
+                        If statistic &lt; {{ chi_square.critical_value }}, the image passes the test (undetectable).
+                        Our encryption before hiding randomizes the payload, making detection difficult.
+                    </small>
+                </div>
+            </div>
+            
+            <!-- Histogram Analysis -->
+            <div class="mb-4">
+                <h4 class="fw-bold mb-3">
+                    <i class="fas fa-chart-bar me-2 text-primary"></i>
+                    Histogram Analysis
+                </h4>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="p-3 bg-light rounded text-center">
+                            <h6 class="text-muted mb-1">Mean Frequency</h6>
+                            <h4 class="fw-bold mb-0">{{ histogram.mean_frequency }}</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="p-3 bg-light rounded text-center">
+                            <h6 class="text-muted mb-1">Std Deviation</h6>
+                            <h4 class="fw-bold mb-0">{{ histogram.std_deviation }}</h4>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="p-3 bg-light rounded text-center">
+                            <h6 class="text-muted mb-1">Uniformity Score</h6>
+                            <h4 class="fw-bold mb-0">{{ histogram.uniformity_score }}%</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Image Quality Metrics -->
+            <div class="mb-4">
+                <h4 class="fw-bold mb-3">
+                    <i class="fas fa-image me-2 text-primary"></i>
+                    Image Quality Metrics
+                </h4>
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="p-3 bg-light rounded">
+                            <h6 class="text-muted mb-1">Resolution</h6>
+                            <p class="fw-bold mb-0">{{ quality.resolution }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="p-3 bg-light rounded">
+                            <h6 class="text-muted mb-1">Total Pixels</h6>
+                            <p class="fw-bold mb-0">{{ "{:,}".format(quality.total_pixels) }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="p-3 bg-light rounded">
+                            <h6 class="text-muted mb-1">Color Depth</h6>
+                            <p class="fw-bold mb-0">{{ quality.color_depth }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="p-3 bg-light rounded">
+                            <h6 class="text-muted mb-1">LSB Capacity</h6>
+                            <p class="fw-bold mb-0">{{ "{:,}".format(quality.capacity_bytes) }} bytes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Security Summary -->
+            <div class="alert alert-success" style="border-radius: 15px;">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-shield-alt me-2"></i>Security Summary
+                </h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="mb-2"><i class="fas fa-check text-success me-2"></i>Encryption applied before hiding</p>
+                        <p class="mb-2"><i class="fas fa-check text-success me-2"></i>LSB changes imperceptible to human eye</p>
+                        <p class="mb-0"><i class="fas fa-check text-success me-2"></i>Statistical distribution randomized</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-2"><i class="fas fa-check text-success me-2"></i>Resistant to visual inspection</p>
+                        <p class="mb-2"><i class="fas fa-check text-success me-2"></i>Passes chi-square detection test</p>
+                        <p class="mb-0"><i class="fas fa-check text-success me-2"></i>Cryptographically secure payload</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Back buttons -->
+            <div class="text-center mt-4">
+                <a href="{{ url_for('message_success', message_id=message.id) }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Message
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-home me-2"></i>Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

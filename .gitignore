@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+
+# Database
+*.db
+*.sqlite
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Flask
+instance/
+
+# Uploads / Generated
+uploads/
+stego_images/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+venv/
+
+# Database
+*.db
+*.sqlite
+*.db-journal
+*.db-wal
+*.db-shm
+
+# Flask
+instance/
+
+# Uploads / Generated
+uploads/
+stego_images/
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# App configuration
+config.py

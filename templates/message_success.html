@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Message Hidden Successfully - SteganoSecure{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card-custom p-5 text-center">
+            <div class="mb-4">
+                <div class="text-success mb-3">
+                    <i class="fas fa-check-circle fa-5x"></i>
+                </div>
+                <h2 class="fw-bold text-success">Message Hidden Successfully!</h2>
+                <p class="text-muted">Your encrypted message is now concealed within the image</p>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-6 mb-3">
+                    <div class="p-3 bg-light rounded">
+                        <i class="fas fa-user text-primary fa-2x mb-2"></i>
+                        <h6 class="fw-bold">Receiver</h6>
+                        <p class="mb-0">{{ message.receiver.username }}</p>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <div class="p-3 bg-light rounded">
+                        <i class="fas fa-clock text-info fa-2x mb-2"></i>
+                        <h6 class="fw-bold">Created</h6>
+                        <p class="mb-0">{{ message.created_at.strftime('%B %d, %Y') }}</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mb-4">
+                <h5 class="fw-bold mb-3">
+                    <i class="fas fa-qrcode me-2"></i>QR Code for Easy Sharing
+                </h5>
+                <div class="p-4 bg-white rounded border">
+                    {% if qr_code %}
+                        <img src="{{ qr_code }}" alt="QR Code" class="img-fluid" style="max-width: 250px;">
+                    {% else %}
+                        <p class="text-muted">QR Code generation failed</p>
+                    {% endif %}
+                </div>
+                <small class="text-muted mt-2 d-block">
+                    <i class="fas fa-info-circle me-1"></i>Scan this QR code to quickly access the message
+                </small>
+            </div>
+            
+            <div class="alert alert-success" style="border-radius: 15px;">
+                <h6 class="fw-bold mb-2">
+                    <i class="fas fa-shield-alt me-2"></i>Security Summary:
+                </h6>
+                <div class="row text-start">
+                    <div class="col-md-6">
+                        <small><i class="fas fa-check text-success me-1"></i>Message encrypted with AES-256</small><br>
+                        <small><i class="fas fa-check text-success me-1"></i>Digitally signed with RSA-2048</small>
+                    </div>
+                    <div class="col-md-6">
+                        <small><i class="fas fa-check text-success me-1"></i>Hash verification enabled</small><br>
+                        <small><i class="fas fa-check text-success me-1"></i>Hidden using LSB steganography</small>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+                <!-- NEW FEATURE 1: Compare Images -->
+                <a href="{{ url_for('compare_images', message_id=message.id) }}" class="btn btn-success btn-lg">
+                    <i class="fas fa-search-plus me-2"></i>Compare Images (See The Magic!)
+                </a>
+                
+                <!-- NEW FEATURE 2: Steganalysis Test -->
+                <a href="{{ url_for('analyze_stego', message_id=message.id) }}" class="btn btn-warning btn-lg">
+                    <i class="fas fa-microscope me-2"></i>🔬 Run Steganalysis Test
+                </a>
+                
+                <!-- EXISTING BUTTONS -->
+                <a href="{{ url_for('download_image', message_id=message.id) }}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-download me-2"></i>Download Stego Image
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-home me-2"></i>Back to Dashboard
+                </a>
+                <a href="{{ url_for('hide_message') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-plus me-2"></i>Hide Another Message
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

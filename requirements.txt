@@ -1,0 +1,12 @@
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+Werkzeug==3.0.1
+SQLAlchemy==2.0.25
+pyotp==2.9.0
+cryptography==41.0.7
+stegano==0.11.2
+Pillow==10.2.0
+numpy==1.26.3
+scipy==1.11.4
+qrcode==7.4.2
+python-dotenv==1.0.1

@@ -1,0 +1,25 @@
+# config.py
+import os
+
+class Config:
+    SECRET_KEY = 'steganosecret'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///steganography.db'
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "connect_args": {
+            "check_same_thread": False,
+            "timeout": 30
+        }
+    }
+    # Upload settings
+    UPLOAD_FOLDER = 'uploads'
+    STEGO_FOLDER = 'stego_images'
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16MB max
+    ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
+    
+    # Email settings for OTP
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = 'mail@gmail.com' 
+    MAIL_PASSWORD = '16digit pwd'      

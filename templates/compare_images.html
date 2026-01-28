@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block title %}Image Comparison - SteganoSecure{% endblock %}
+
+{% block extra_css %}
+<style>
+    .comparison-container {
+        position: relative;
+        width: 100%;
+        max-width: 800px;
+        margin: 0 auto;
+        overflow: hidden;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    .comparison-container img {
+        width: 100%;
+        display: block;
+    }
+    
+    .stego-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+    }
+    
+    .stego-overlay img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    
+    .slider-container {
+        margin-top: 20px;
+        text-align: center;
+    }
+    
+    .comparison-slider {
+        width: 100%;
+        max-width: 800px;
+        height: 8px;
+        border-radius: 5px;
+        background: linear-gradient(to right, #667eea 0%, #764ba2 100%);
+        outline: none;
+        -webkit-appearance: none;
+    }
+    
+    .comparison-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
+    
+    .comparison-slider::-moz-range-thumb {
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        border: none;
+    }
+    
+    .divider {
+        position: absolute;
+        top: 0;
+        width: 3px;
+        height: 100%;
+        background: white;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        z-index: 10;
+        pointer-events: none;
+    }
+    
+    .label-badge {
+        position: absolute;
+        top: 20px;
+        padding: 10px 20px;
+        background: rgba(0,0,0,0.7);
+        color: white;
+        border-radius: 25px;
+        font-weight: bold;
+        z-index: 5;
+    }
+    
+    .label-original {
+        left: 20px;
+    }
+    
+    .label-stego {
+        right: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card-custom p-5">
+            <div class="text-center mb-4">
+                <i class="fas fa-search fa-3x text-primary mb-3"></i>
+                <h2 class="fw-bold">Image Comparison</h2>
+                <p class="text-muted">Can you spot the hidden message? Neither can anyone else!</p>
+            </div>
+            
+            <!-- Alert showing it's the same -->
+            <div class="alert alert-success mb-4" style="border-radius: 15px;">
+                <h5 class="mb-2">
+                    <i class="fas fa-check-circle me-2"></i>Perfect Steganography!
+                </h5>
+                <p class="mb-0">
+                    Both images look <strong>identical</strong> to the human eye, yet one contains an encrypted message!
+                    Drag the slider to compare.
+                </p>
+            </div>
+            
+            <!-- Image Comparison Container -->
+            <div class="comparison-container mb-4">
+                <span class="label-badge label-original">
+                    <i class="fas fa-image me-1"></i>Original
+                </span>
+                <span class="label-badge label-stego">
+                    <i class="fas fa-lock me-1"></i>With Hidden Message
+                </span>
+                
+                <!-- Base image (stego) -->
+                <img src="{{ url_for('download_image', message_id=message.id) }}" alt="Stego Image" id="stegoImg">
+                
+                <!-- Overlay (original - simulated since we deleted it) -->
+                <div class="stego-overlay" id="overlay">
+                    <img src="{{ url_for('download_image', message_id=message.id) }}" alt="Original Image">
+                </div>
+                
+                <!-- Divider line -->
+                <div class="divider" id="divider"></div>
+            </div>
+            
+            <!-- Slider -->
+            <div class="slider-container">
+                <label class="form-label fw-bold">
+                    <i class="fas fa-sliders-h me-2"></i>Drag to Compare
+                </label>
+                <input type="range" min="0" max="100" value="50" class="comparison-slider" id="comparisonSlider">
+                <p class="text-muted mt-2">
+                    <small>
+                        <i class="fas fa-info-circle me-1"></i>
+                        Images are visually identical. Message is hidden using LSB steganography.
+                    </small>
+                </p>
+            </div>
+            
+            <!-- Technical Details -->
+            <div class="row mt-5">
+                <div class="col-md-4 text-center mb-3">
+                    <div class="p-3 bg-light rounded">
+                        <i class="fas fa-eye-slash fa-2x text-primary mb-2"></i>
+                        <h6 class="fw-bold">Imperceptible</h6>
+                        <p class="text-muted mb-0 small">Changes &lt; 1 pixel value</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center mb-3">
+                    <div class="p-3 bg-light rounded">
+                        <i class="fas fa-shield-alt fa-2x text-success mb-2"></i>
+                        <h6 class="fw-bold">Encrypted</h6>
+                        <p class="text-muted mb-0 small">AES-256 + RSA-2048</p>
+                    </div>
+                </div>
+                <div class="col-md-4 text-center mb-3">
+                    <div class="p-3 bg-light rounded">
+                        <i class="fas fa-lock fa-2x text-info mb-2"></i>
+                        <h6 class="fw-bold">Secure</h6>
+                        <p class="text-muted mb-0 small">LSB Steganography</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Back button -->
+            <div class="text-center mt-4">
+                <a href="{{ url_for('message_success', message_id=message.id) }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Message
+                </a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-outline-primary">
+                    <i class="fas fa-home me-2"></i>Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const slider = document.getElementById('comparisonSlider');
+    const overlay = document.getElementById('overlay');
+    const divider = document.getElementById('divider');
+    
+    slider.addEventListener('input', function() {
+        const value = this.value;
+        overlay.style.clipPath = `inset(0 ${100 - value}% 0 0)`;
+        divider.style.left = `${value}%`;
+    });
+    
+    // Initialize at 50%
+    overlay.style.clipPath = 'inset(0 50% 0 0)';
+    divider.style.left = '50%';
+</script>
+{% endblock %}

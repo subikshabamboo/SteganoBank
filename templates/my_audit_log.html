@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}My Audit Log - SteganoSecure{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 mb-4">
+        <div class="card-custom p-4">
+            <h2 class="mb-1">
+                <i class="fas fa-history text-primary me-2"></i>
+                My Audit Log
+            </h2>
+            <p class="text-muted mb-0">Your activity recorded in the blockchain</p>
+        </div>
+    </div>
+</div>
+
+<!-- Stats -->
+<div class="row mb-4">
+    <div class="col-md-4 mb-3">
+        <div class="card-custom p-4 text-center">
+            <i class="fas fa-list fa-2x text-primary mb-2"></i>
+            <h3 class="fw-bold">{{ transactions|length }}</h3>
+            <p class="text-muted mb-0">Your Transactions</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card-custom p-4 text-center">
+            {% if stats.chain_valid %}
+                <i class="fas fa-shield-check fa-2x text-success mb-2"></i>
+                <p class="fw-bold text-success mb-0">Verified</p>
+            {% else %}
+                <i class="fas fa-exclamation-triangle fa-2x text-danger mb-2"></i>
+                <p class="fw-bold text-danger mb-0">Compromised</p>
+            {% endif %}
+            <p class="text-muted mb-0">Integrity Status</p>
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <div class="card-custom p-4 text-center">
+            <i class="fas fa-lock fa-2x text-info mb-2"></i>
+            <p class="fw-bold mb-0">Immutable</p>
+            <p class="text-muted mb-0">Cannot Be Altered</p>
+        </div>
+    </div>
+</div>
+
+<!-- Transactions -->
+<div class="row">
+    <div class="col-12">
+        <h4 class="text-white mb-3">
+            <i class="fas fa-list me-2"></i>Your Transactions
+        </h4>
+        
+        {% if transactions %}
+            {% for item in transactions|reverse %}
+            <div class="card-custom mb-3">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-2 text-center">
+                            <i class="fas fa-cube fa-2x text-primary mb-2"></i>
+                            <p class="fw-bold mb-0">Block #{{ item.block_index }}</p>
+                        </div>
+                        <div class="col-md-7">
+                            <h6 class="mb-2">
+                                <span class="badge 
+                                    {% if item.transaction.type == 'USER_LOGIN' %}bg-success
+                                    {% elif item.transaction.type == 'MESSAGE_HIDDEN' %}bg-primary
+                                    {% elif item.transaction.type == 'MESSAGE_EXTRACTED' %}bg-info
+                                    {% elif item.transaction.type == 'MESSAGE_DELETED' %}bg-danger
+                                    {% else %}bg-secondary{% endif %}">
+                                    {{ item.transaction.type }}
+                                </span>
+                            </h6>
+                            <p class="mb-1">{{ item.transaction.details }}</p>
+                            <small class="text-muted">
+                                <i class="fas fa-clock me-1"></i>{{ item.transaction.timestamp }}
+                            </small>
+                        </div>
+                        <div class="col-md-3">
+                            <small class="text-muted d-block">
+                                <i class="fas fa-fingerprint me-1"></i><strong>Block Hash:</strong>
+                            </small>
+                            <code style="font-size: 10px;">{{ item.block_hash[:24] }}...</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="card-custom p-5 text-center">
+                <i class="fas fa-inbox fa-4x text-muted mb-3"></i>
+                <h4 class="text-muted">No transactions yet</h4>
+                <p class="text-muted">Your activities will be recorded here</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('dashboard') }}" class="btn btn-outline-light btn-lg">
+        <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+    </a>
+</div>
+{% endblock %}

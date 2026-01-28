@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+{% block title %}Authorization & Access Control{% endblock %}
+
+{% block content %}
+<div class="card card-custom p-4 mb-5">
+
+    <!-- PAGE HEADER -->
+    <h3 class="text-center mb-3">
+        <i class="fas fa-user-shield me-2"></i>
+        Authorization & Access Control
+    </h3>
+    <p class="text-center text-muted">
+        Clearly defined access rights ensuring confidentiality, integrity, and accountability
+    </p>
+
+    <hr>
+
+    <!-- SECTION 3.1 -->
+    <h4 class="mt-4">
+        <i class="fas fa-table me-2"></i>
+        3.1 Access Control Matrix
+    </h4>
+
+    <p class="mt-3">
+        An <strong>Access Control Matrix</strong> defines which subjects (roles) can perform
+        which actions on specific objects (resources) within the system.
+    </p>
+
+    <div class="table-responsive mt-4">
+        <table class="table table-bordered text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>Role (Subject)</th>
+                    <th>Hidden Messages</th>
+                    <th>Cover Images</th>
+                    <th>Decryption Keys</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="badge bg-danger">Admin</span></td>
+                    <td>Read, Delete (All)</td>
+                    <td>View, Delete (All)</td>
+                    <td>View All (Monitoring)</td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-primary">Sender</span></td>
+                    <td>Create, Read (Own Only)</td>
+                    <td>Upload, View (Own Only)</td>
+                    <td>Generate & View Own</td>
+                </tr>
+                <tr>
+                    <td><span class="badge bg-success">Receiver</span></td>
+                    <td>Read, Extract (Assigned)</td>
+                    <td>View (Shared Only)</td>
+                    <td>Use Assigned Only</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- WHY DESIGN -->
+    <div class="alert alert-info mt-4">
+        <strong>Why this design?</strong>
+        <ul class="mt-2 mb-0">
+            <li><strong>Admin:</strong> Moderates the system without violating message privacy</li>
+            <li><strong>Sender:</strong> Can create messages but cannot alter them post-delivery</li>
+            <li><strong>Receiver:</strong> Can extract only intended messages</li>
+        </ul>
+    </div>
+
+    <hr>
+
+    <!-- SECTION 3.2 -->
+    <h4 class="mt-4">
+        <i class="fas fa-balance-scale me-2"></i>
+        3.2 Policy Definition & Justification
+    </h4>
+
+    <!-- POLICY 1 -->
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5>
+                <i class="fas fa-lock me-2 text-primary"></i>
+                Policy 1: Least Privilege Principle
+            </h5>
+            <p>
+                Users are granted only the minimum permissions required to perform their role.
+            </p>
+            <ul>
+                <li>Senders cannot read others' messages</li>
+                <li>Receivers cannot send messages</li>
+            </ul>
+            <p class="text-muted">
+                <strong>Justification:</strong> Reduces attack surface and limits damage from compromised accounts
+            </p>
+        </div>
+    </div>
+
+    <!-- POLICY 2 -->
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5>
+                <i class="fas fa-user-friends me-2 text-warning"></i>
+                Policy 2: Separation of Duties
+            </h5>
+            <p>
+                No single role can perform all sensitive operations.
+            </p>
+            <ul>
+                <li>Admin can view metadata but cannot decrypt messages</li>
+            </ul>
+            <p class="text-muted">
+                <strong>Justification:</strong> Prevents insider threats and abuse of authority
+            </p>
+        </div>
+    </div>
+
+    <!-- POLICY 3 -->
+    <div class="card mt-3">
+        <div class="card-body">
+            <h5>
+                <i class="fas fa-eye-slash me-2 text-success"></i>
+                Policy 3: Need-to-Know Basis
+            </h5>
+            <p>
+                Access is granted strictly based on relevance.
+            </p>
+            <ul>
+                <li>Receivers see only messages addressed to them</li>
+            </ul>
+            <p class="text-muted">
+                <strong>Justification:</strong> Protects confidentiality and prevents information leakage
+            </p>
+        </div>
+    </div>
+
+    <hr>
+
+    <!-- REAL WORLD -->
+    <h4 class="mt-4">
+        <i class="fas fa-briefcase me-2"></i>
+        Real-World Justification: Corporate Whistleblowing
+    </h4>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="alert alert-primary">
+                <h6>Sender (Employee)</h6>
+                <ul class="mb-0">
+                    <li>Sends confidential evidence</li>
+                    <li>Cannot access others' reports</li>
+                    <li>Identity protected via signatures</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="alert alert-success">
+                <h6>Receiver (Investigator)</h6>
+                <ul class="mb-0">
+                    <li>Receives reports securely</li>
+                    <li>Cannot send messages</li>
+                    <li>Verifies authenticity</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="alert alert-danger">
+                <h6>Admin (IT Department)</h6>
+                <ul class="mb-0">
+                    <li>Monitors system integrity</li>
+                    <li>Cannot read message content</li>
+                    <li>Removes illegal material</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
