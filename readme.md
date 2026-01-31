@@ -1,4 +1,4 @@
-# 🔐 SteganoSecure - Secure Steganography Messaging System
+# 🔐 SteganoBank - Secure Steganography Messaging System
 
 A comprehensive web-based application that demonstrates multiple security concepts including authentication, authorization, encryption, digital signatures, hashing, and steganography with blockchain-based audit trails.
 
